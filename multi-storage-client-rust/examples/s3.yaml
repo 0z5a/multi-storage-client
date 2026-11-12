@@ -1,0 +1,8 @@
+profiles:
+  data:
+    storage_provider:
+      type: s3
+      options:
+        base_path: ${MSC_S3_BUCKET}/rust-data
+        region_name: ${AWS_REGION}
+    # Omit credentials_provider to use AWS default credential discovery.

@@ -1,0 +1,14 @@
+profiles:
+  compatible:
+    storage_provider:
+      type: s8k
+      options:
+        base_path: ${MSC_S3_BUCKET}/rust-data
+        endpoint_url: ${MSC_S3_ENDPOINT}
+        region_name: ${AWS_REGION}
+        path_style: true
+    credentials_provider:
+      type: S3Credentials
+      options:
+        access_key: ${AWS_ACCESS_KEY_ID}
+        secret_key: ${AWS_SECRET_ACCESS_KEY}

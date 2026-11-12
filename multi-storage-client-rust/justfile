@@ -1,0 +1,43 @@
+set shell := ["bash", "-euo", "pipefail", "-c"]
+
+# Prefer Apple UUID headers over transitive libuuid headers in the Nix shell.
+export CFLAGS := if os() == "macos" { if env("IN_NIX_SHELL", "") != "" { "-isystem " + env("SDKROOT") + "/usr/include " + env("CFLAGS", "") } else { env("CFLAGS", "") } } else { env("CFLAGS", "") }
+
+# List recipes.
+help:
+    just --list
+
+# Select this subproject's pinned toolchain.
+prepare-toolchain:
+    rustup show active-toolchain
+
+# Verify formatting and lint every target.
+analyze:
+    cargo fmt --all -- --check
+    cargo clippy --locked --all-targets --all-features -- -D warnings
+
+# Test supported feature combinations and documentation examples.
+test:
+    cargo test --locked --all-features --all-targets
+    cargo test --locked --all-features --doc
+    cargo test --locked --no-default-features --all-targets
+
+# Build warning-free API documentation.
+document:
+    RUSTDOCFLAGS="-D warnings" cargo doc --locked --all-features --no-deps
+
+# Run quality gates and isolated local examples.
+check: analyze test document
+    cargo run --locked --example posix_quickstart
+
+# Build the independent library and benchmark.
+build: check test-s3 smoke
+    cargo build --locked --all-features
+
+# Run isolated HTTP contracts, Versity integration, and S3 benchmark tests.
+test-s3 *args:
+    bash scripts/test-s3.sh {{args}}
+
+# Run a small POSIX benchmark with file phases and JSON output.
+smoke:
+    bash scripts/smoke-posix.sh

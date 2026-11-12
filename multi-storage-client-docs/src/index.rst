@@ -40,6 +40,7 @@ It provides a generic interface to interact with objects and files across variou
 
    references/configuration
    references/api
+   references/rust_native
    references/checksum_support
 
 .. toctree::

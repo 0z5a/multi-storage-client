@@ -8,6 +8,10 @@ It provides a generic interface to interact with objects and files across variou
 
 See the [documentation](https://nvidia.github.io/multi-storage-client/) to get started.
 
+The initial [native Rust library and benchmark](multi-storage-client-rust/README.md)
+support POSIX and S3/S3-compatible storage. This independent package is separate
+from the Python Rust accelerator in `multi-storage-client/rust`.
+
 ## Contribution Guidelines
 
 - Start here: `CONTRIBUTING.md`
@@ -28,6 +32,10 @@ Key:
 │
 │   # Client Python package.
 ├── multi-storage-client
+│   └── ...
+│
+│   # Client Rust package.
+├── multi-storage-client-rust
 │   └── ...
 │
 │   # Client documentation.
